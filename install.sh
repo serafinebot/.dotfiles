@@ -5,15 +5,6 @@ rm -rf ~/.zshrc
 
 exclude=("resources")
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-	exclude+=("yabai" "skhd" "sketchybar")
-fi
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	echo "unloading yabai launch agent"
-	launchctl unload ~/Library/LaunchAgents/com.yabai.load-sa.plist
-fi
-
 for dir in */ ; do
 	name=`echo $dir | sed 's/\///g'`
 	if [[ ! " ${exclude[*]} " =~ " ${name} " ]]; then
@@ -22,8 +13,3 @@ for dir in */ ; do
 		stow "${dir}"
 	fi
 done
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	echo "loading yabai launch agent"
-	launchctl load ~/Library/LaunchAgents/com.yabai.load-sa.plist
-fi
