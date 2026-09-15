@@ -22,6 +22,9 @@ vim.opt.splitbelow = true
 vim.opt.signcolumn = "yes"
 vim.opt.guicursor = "n-v-i-c-r-t:block"
 
+-- shift+enter inserts a newline (jupynvim overrides this in .ipynb buffers)
+vim.keymap.set("i", "<S-CR>", "<C-v><C-j>")
+
 -- indentation
 vim.opt.autoindent = true
 vim.opt.smartindent = true

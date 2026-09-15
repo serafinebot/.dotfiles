@@ -28,5 +28,3 @@ shell-integration-features = no-cursor
 quit-after-last-window-closed = true
 macos-titlebar-style = hidden
 confirm-close-surface = false
-
-keybind = shift+enter=text:\n

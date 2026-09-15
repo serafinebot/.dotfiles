@@ -18,6 +18,10 @@ export PATH="${HOMEBREW_HOME}/opt/flex/bin:${PATH}"
 export PATH="${HOMEBREW_HOME}/bin:${HOMEBREW_HOME}/opt:${HOME_BIN}:${PIO_BIN}:${PATH}"
 export PATH="${HOME}/.local/bin:${PATH}"
 
+# Ada (GNAT + gprbuild via Alire)
+export PATH="${HOME}/.local/share/alire/toolchains/gnat_native_16.1.0_657cf254/bin:${PATH}"
+export PATH="${HOME}/.local/share/alire/toolchains/gprbuild_26.0.1_6bf7d80c/bin:${PATH}"
+
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
@@ -42,3 +46,19 @@ source $ZSH/oh-my-zsh.sh
 alias grep="grep --color=always"
 alias nv="nvim"
 alias dict='zk edit --interactive --notebook-dir ${HOME}/dev/dictionary'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/serafi/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/serafi/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/serafi/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/serafi/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
