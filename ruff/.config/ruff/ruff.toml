@@ -1,0 +1,157 @@
+# Global fallback ruff config; a project's own pyproject.toml/ruff.toml overrides this.
+
+# Max line length (lint + format wrapping). E501 is ignored below to avoid
+# fighting the formatter, so this mainly governs format-time re-wrapping.
+line-length = 160
+
+# Spaces per indentation level, used by the formatter and by E501's tab width.
+indent-width = 2
+
+# Assume Python 3.8 syntax (gates which pyupgrade rules apply).
+target-version = "py38"
+
+# Directories never linted.
+exclude = [
+	".bzr",
+	".direnv",
+	".eggs",
+	".git",
+	".git-rewrite",
+	".hg",
+	".mypy_cache",
+	".nox",
+	".pants.d",
+	".pytype",
+	".ruff_cache",
+	".svn",
+	".tox",
+	".venv",
+	"__pypackages__",
+	"_build",
+	"buck-out",
+	"build",
+	"dist",
+	"node_modules",
+	"venv",
+]
+
+[lint]
+# ALL enables every rule family:
+#   F      Pyflakes: undefined names, unused imports/variables, f-string issues
+#   E, W   pycodestyle: style errors (E) and warnings (W)
+#   C90    mccabe: functions too complex
+#   I      isort: import order and grouping
+#   N      pep8-naming: naming conventions
+#   D      pydocstyle: docstring presence/style (docstring rules ignored below)
+#   UP     pyupgrade: modernize syntax for target-version
+#   YTT    flake8-2020: wrong sys.version usage
+#   ASYNC  flake8-async: blocking calls in async code
+#   S      flake8-bandit: security checks
+#   B      flake8-bugbear: likely bugs / footguns
+#   A      flake8-builtins: shadowing builtins
+#   COM    flake8-commas: comma placement (COM812 ignored, formatter owns it)
+#   C4     flake8-comprehensions: unnecessary comprehension constructs
+#   DTZ    flake8-datetimez: naive datetimes
+#   T10    flake8-debugger: debugger imports left in code
+#   DJ     flake8-django: Django antipatterns
+#   EM     flake8-errmsg: raw strings/variables in exceptions
+#   EXE    flake8-executable: shebang / executable-bit issues
+#   FA     flake8-future-annotations: missing `from __future__ import annotations`
+#   ISC    flake8-implicit-str-concat: implicit string concatenation
+#   ICN    flake8-import-conventions: unconventional import aliases
+#   LOG    flake8-logging: logging pitfalls
+#   G      flake8-logging-format: lazy %-formatting in logging calls
+#   INP    flake8-no-pep420: implicit namespace packages
+#   PIE    flake8-pie: misc useless constructs
+#   T20    flake8-print: print/pprint calls (both ignored below)
+#   PYI    flake8-pyi: stub-file conventions
+#   PT     flake8-pytest-style: pytest best practices
+#   Q      flake8-quotes: quote consistency
+#   RSE    flake8-return: needless constructs around return
+#   RET    flake8-return: return statement style
+#   SLF    flake8-self: private-member access from outside
+#   SLOT   flake8-slots: define __slots__ when needed
+#   SIM    flake8-simplify: simplifiable constructs
+#   TID    flake8-tidy-imports: banned/relative imports
+#   TC     flake8-type-checking: imports only needed at runtime vs type-check time
+#   INT    flake8-gettext: string interpolation in i18n calls
+#   ARG    flake8-unused-arguments: unused function arguments
+#   PTH    flake8-use-pathlib: os.path where pathlib fits
+#   TD     flake8-todos: TODO annotations (author/link rules ignored below)
+#   FIX    flake8-fixmes: FIXME/TODO markers (FIX002 ignored below)
+#   ERA    eradicate: commented-out code (ignored below)
+#   PD     pandas-vet: pandas antipatterns (ignored wholesale below)
+#   PGH    pygrep-hooks: misc regex/eval checks
+#   PL     Pylint: PLR refactor, PLE errors, PLW warnings (a few ignored below)
+#   TRY    tryceratops: exception-handling style
+#   FLY    flynt: f-string instead of .format/join
+#   NPY    NumPy-specific rules
+#   FAST   FastAPI-specific rules
+#   AIR    Airflow-specific rules
+#   PERF   Perflint: performance antipatterns
+#   FURB   refurb: modernization/clarity refactors
+#   DOC    pydoclint: docstring signature coverage
+#   RUF    ruff-specific rules
+select = ["ALL"]
+
+# Rules turned OFF despite ALL (name from `ruff rule <code>`):
+ignore = [
+	"PD",       # pandas-vet: entire family
+	"E501",     # line-too-long: conflicts with formatter; line-length above governs wrapping
+	"E701",     # multiple-statements-on-one-line-colon
+	"E702",     # multiple-statements-on-one-line-semicolon
+	"E741",     # ambiguous-variable-name: forbids l/I/O names
+	"E401",     # multiple-imports-on-one-line
+	"D100",     # undocumented-public-module
+	"D101",     # undocumented-public-class
+	"D102",     # undocumented-public-method
+	"D103",     # undocumented-public-function
+	"D105",     # undocumented-magic-method
+	"D107",     # undocumented-public-init
+	"D203",     # incorrect-blank-line-before-class
+	"D211",     # blank-line-before-class
+	"D212",     # multi-line-summary-first-line
+	"D213",     # multi-line-summary-second-line
+	"S101",     # assert: needed in tests; flagged everywhere otherwise
+	"I001",     # unsorted-imports
+	"Q003",     # avoidable-escaped-quote
+	"T201",     # print
+	"PYI034",   # non-self-return-type
+	"W292",     # missing-newline-at-end-of-file: formatter owns this
+	"TD002",    # missing-todo-author
+	"TD003",    # missing-todo-link
+	"PT018",    # pytest-composite-assertion
+	"PT027",    # pytest-unittest-raises-assertion
+	"ANN",      # flake8-annotations: entire family (missing type annotations)
+	"COM812",   # missing-trailing-comma: conflicts with formatter
+	"PLR2004",  # magic-value-comparison
+	"PLR0912",  # too-many-branches
+	"PLR0913",  # too-many-arguments
+	"ERA001",   # commented-out-code
+	"FBT001",   # boolean-type-hint-positional-argument
+	"FBT002",   # boolean-default-value-positional-argument
+	"BLE001",   # blind-except
+	"FIX002",   # line-contains-todo
+	"EM101",    # raw-string-in-exception
+	"T203",     # p-print
+	"TRY003",   # raise-vanilla-args
+	"CPY001",   # missing copyright notice
+]
+
+# With --fix / code actions, every fixable rule may auto-fix.
+fixable = ["ALL"]
+unfixable = []
+
+# Variables matching this pattern count as intentionally unused (like pylint).
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# Star imports are tolerated in __init__.py.
+"__init__.py" = ["F403"]
+
+[format]
+# Inert in nvim by choice: no Python formatter is wired in (`<leader>fm` skips
+# Python). Kept for ad-hoc `ruff format` CLI runs, which get 2-space indent.
+quote-style = "double"       # prefer "..." over '...'
+indent-style = "space"       # spaces over tabs (width comes from indent-width above)
+docstring-code-format = true # format code examples inside docstrings

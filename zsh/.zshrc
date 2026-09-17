@@ -1,11 +1,6 @@
 export KEYTIMEOUT=10
-export TERM="xterm-256color"
 export EDITOR="$(which nvim)"
 export XDG_CONFIG_HOME="${HOME}/.config"
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export HOMEBREW_HOME="/opt/homebrew"
 export PIO_BIN="${HOME}/.platformio/penv/bin"
@@ -24,7 +19,7 @@ export PATH="${HOME}/.local/share/alire/toolchains/gprbuild_26.0.1_6bf7d80c/bin:
 
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+eval "$(pyenv init --no-rehash -)"
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # ZSH
@@ -41,24 +36,32 @@ plugins=(
 
 export FZF_DEFAULT_OPTS="--bind=ctrl-p:up,ctrl-n:down"
 
+# Cache completions: full rebuild only if the dump is missing or older than a day
+compinit() {
+  local dump="${ZSH_COMPDUMP:-${ZDOTDIR:-$HOME}/.zcompdump}"
+  local -a opts
+  if [[ ! -s $dump || -n $dump(#qN.mh+24) ]]; then
+    opts=()
+  else
+    opts=(-C)
+  fi
+  unfunction compinit
+  autoload -Uz compinit
+  compinit "${opts[@]}" "$@"
+}
+
 source $ZSH/oh-my-zsh.sh
 
 alias grep="grep --color=always"
 alias nv="nvim"
 alias dict='zk edit --interactive --notebook-dir ${HOME}/dev/dictionary'
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/serafi/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/serafi/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/serafi/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/serafi/miniconda3/bin:$PATH"
-    fi
+# Lazy-load conda (the init hook costs ~150ms per shell)
+if [[ -x "$HOME/miniconda3/bin/conda" ]]; then
+  conda() {
+    unfunction conda
+    eval "$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+    conda "$@"
+  }
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
